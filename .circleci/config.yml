@@ -219,4 +219,4 @@ workflows:
           build-context: "."
           cache-type: local
           cache-mode: max
-          local-cache-path:
+          local-cache-path: "/tmp/dockercache"
