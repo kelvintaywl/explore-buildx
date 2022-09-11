@@ -175,14 +175,19 @@ jobs:
                 key: buildx-{{ arch }}-{{ .Branch }}-{{ checksum "<< parameters.local-cache-path >>/index.json" }}
                 paths:
                   - << parameters.local-cache-path >>
-      - run:
-          name: Inspect built image(s)
-          command: |
-            docker image ls
-      - run:
-          name: Publish image
-          command: |
-            docker image push "${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.tag >>"
+      - unless:
+          condition:
+            equal: [ inline, << parameters.cache-type >> ]
+          steps:
+            - run:
+                name: Inspect built image(s)
+                command: |
+                  docker image ls
+            
+            - run:
+                name: Publish image
+                command: |
+                  docker image push "${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.tag >>"
 
 workflows:
   buildx:
