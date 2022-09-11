@@ -7,3 +7,4 @@ Dockerfile*
 .npmrc
 .nvmrc
 circleci
+README.md
