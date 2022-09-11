@@ -11,6 +11,8 @@ Specifically, we explore the cache options available in Buildx:
 We run the same commands below on a CircleCI pipeline.
 See [.circleci/config.yml](.circleci/config.yml).
 
+You can explore [the built images here](#output).
+
 ## Prerequisites
 
 It is recommended to set up a builder instance for Docker Buildx operations.
@@ -59,7 +61,7 @@ docker buildx build --progress=plain \
 # we should see the image above listed
 docker image ls
 
-docker image push docker.io/kelvintaywl/synk-node-multistage:local-cache-1234567"
+docker image push docker.io/kelvintaywl/snyk-node-multistage:local-cache-1234567"
 ```
 
 ## Registry Cache
@@ -78,9 +80,9 @@ docker buildx build --progress=plain \
     --tag="docker.io/kelvintaywl/snyk-node-multistage:registry-cache-1234567" \
     # saves the cache in the same repo space,
     # BUT we use the `cache` tag to avoid conflicts
-    --cache-from="type=registry,ref=docker.io/kelvintaywl/snyk-multistage:cache" \
+    --cache-from="type=registry,ref=docker.io/kelvintaywl/snyk-node-multistage:cache" \
     # mode=max saves all layers from all stages
-    --cache-to="type=registry,mode=max,ref=docker.io/kelvintaywl/snyk-multistage:cache" \
+    --cache-to="type=registry,mode=max,ref=docker.io/kelvintaywl/snyk-node-multistage:cache" \
     --output=type=docker \
     --file=Dockerfile.multistage \
     .
@@ -88,5 +90,27 @@ docker buildx build --progress=plain \
 # we should see the image above listed
 docker image ls
 
-docker image push docker.io/kelvintaywl/synk-node-multistage:registry-cache-1234567"
+docker image push docker.io/kelvintaywl/snyk-node-multistage:registry-cache-1234567"
+```
+
+## Output
+
+In the commands above, we have published the images to the following:
+
+| Strategy | Dockerfile | Repository | Tag |
+| --- | --- |  --- | --- |
+| inline | Dockerfile | [docker.io/kelvintaywl/snyk-node](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node) | latest |
+| inline | Dockerfile.multistage | [docker.io/kelvintaywl/snyk-node-multistage](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node-multistage) | local-cache-* |
+| inline | Dockerfile.multistage | [docker.io/kelvintaywl/snyk-node-multistage](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node-multistage) | registry-cache-* |
+
+
+We can also test the built images:
+
+```console
+$ docker container run -p 3000:3000 --detach docker.io/kelvintaywl/snyk-node:latest
+
+$ curl -s http://localhost:3000 | jq .
+{
+  "hello": "world"
+}
 ```
