@@ -100,8 +100,8 @@ In the commands above, we have published the images to the following:
 | Strategy | Dockerfile | Repository | Tag |
 | --- | --- |  --- | --- |
 | inline | Dockerfile | [docker.io/kelvintaywl/snyk-node](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node) | latest |
-| inline | Dockerfile.multistage | [docker.io/kelvintaywl/snyk-node-multistage](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node-multistage) | local-cache-* |
-| inline | Dockerfile.multistage | [docker.io/kelvintaywl/snyk-node-multistage](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node-multistage) | registry-cache-* |
+| local | Dockerfile.multistage | [docker.io/kelvintaywl/snyk-node-multistage](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node-multistage) | local-cache-* |
+| registry | Dockerfile.multistage | [docker.io/kelvintaywl/snyk-node-multistage](https://hub.docker.com/repository/docker/kelvintaywl/snyk-node-multistage) | registry-cache-* |
 
 
 We can also test the built images:
