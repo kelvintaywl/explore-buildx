@@ -148,7 +148,12 @@ jobs:
                   echo 'export DOCKER_BUILDX_CACHE_FROM="${CACHE_FROM}"' >> $BASH_ENV
 
                   CACHE_TO="type=registry,mode=<< parameters.cache-mode >>,ref="${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.registry-cache-tag >>"
-                  echo 'export DOCKER_BUILDX_CACHE_TO="${CACHE_TO}"' >> $BASH_ENV         
+                  echo 'export DOCKER_BUILDX_CACHE_TO="${CACHE_TO}"' >> $BASH_ENV
+      - run:
+          name: Debug cache options
+          command: |
+            printenv DOCKER_BUILDX_CACHE_FROM
+            printenv DOCKER_BUILDX_CACHE_TO
       - run:
           name: Build image via Docker Buildx
           command: |
