@@ -118,37 +118,43 @@ jobs:
             equal: [ inline, << parameters.cache-type >> ]
           steps:
             - run:
-                name: Set up --cache-from and --cache-to
+                name: Set up Buildx options via env vars
                 command: |
                   CACHE_FROM="type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.tag >>"
                   echo "export DOCKER_BUILDX_CACHE_FROM='${CACHE_FROM}'" >> $BASH_ENV
 
                   CACHE_TO="inline"
                   echo "export DOCKER_BUILDX_CACHE_TO='${CACHE_TO}'" >> $BASH_ENV
+
+                  echo "export DOCKER_BUILDX_OUTPUT_TYPE=registry" >> $BASH_ENV
       - when:
           condition:
             equal: [ local, << parameters.cache-type >> ]
           steps:
             - run:
-                name: Set up --cache-from and --cache-to
+                name: Set up Buildx options via env vars
                 command: |
                   CACHE_FROM="type=local,src=<< parameters.local-cache-path >>"
                   echo "export DOCKER_BUILDX_CACHE_FROM='${CACHE_FROM}'" >> $BASH_ENV
 
                   CACHE_TO="type=local,mode=<< parameters.cache-mode >>,dest=<< parameters.local-cache-path >>"
                   echo "export DOCKER_BUILDX_CACHE_TO='${CACHE_TO}'" >> $BASH_ENV
+
+                  echo "export DOCKER_BUILDX_OUTPUT_TYPE=docker" >> $BASH_ENV
       - when:
           condition:
             equal: [ registry, << parameters.cache-type >> ]
           steps:
             - run:
-                name: Set up --cache-from and --cache-to
+                name: Set up Buildx options via env vars
                 command: |
                   CACHE_FROM="type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.registry-cache-tag >>"
                   echo "export DOCKER_BUILDX_CACHE_FROM='${CACHE_FROM}'" >> $BASH_ENV
 
                   CACHE_TO="type=registry,mode=<< parameters.cache-mode >>,ref=${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.registry-cache-tag >>"
                   echo "export DOCKER_BUILDX_CACHE_TO='${CACHE_TO}'" >> $BASH_ENV
+
+                  echo "export DOCKER_BUILDX_OUTPUT_TYPE=docker" >> $BASH_ENV
       - run:
           name: Build image via Docker Buildx
           command: |
@@ -156,7 +162,7 @@ jobs:
               --tag="${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.tag >>" \
               --cache-from="${DOCKER_BUILDX_CACHE_FROM}" \
               --cache-to="${DOCKER_BUILDX_CACHE_TO}" \
-              --output=type=docker \
+              --output=type="${DOCKER_BUILDX_OUTPUT_TYPE}" \
               << parameters.build-context >>
       - when:
           condition:
