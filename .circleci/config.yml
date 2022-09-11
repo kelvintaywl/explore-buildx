@@ -123,7 +123,7 @@ jobs:
                   CACHE_FROM="type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.tag >>"
                   echo "export DOCKER_BUILDX_CACHE_FROM='${CACHE_FROM}'" >> $BASH_ENV
 
-                  CACHE_TO="inline"
+                  CACHE_TO="type=inline"
                   echo "export DOCKER_BUILDX_CACHE_TO='${CACHE_TO}'" >> $BASH_ENV
 
                   echo "export DOCKER_BUILDX_OUTPUT_TYPE=registry" >> $BASH_ENV
@@ -163,6 +163,7 @@ jobs:
               --cache-from="${DOCKER_BUILDX_CACHE_FROM}" \
               --cache-to="${DOCKER_BUILDX_CACHE_TO}" \
               --output=type="${DOCKER_BUILDX_OUTPUT_TYPE}" \
+              --file=<< parameters.dockerfile >> \
               << parameters.build-context >>
       - when:
           condition:
