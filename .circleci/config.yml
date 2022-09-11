@@ -144,10 +144,10 @@ jobs:
             - run:
                 name: Set up --cache-from and --cache-to
                 command: |
-                  CACHE_FROM="type=registry,ref="${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.registry-cache-tag >>"
+                  CACHE_FROM="type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.registry-cache-tag >>"
                   echo "export DOCKER_BUILDX_CACHE_FROM='${CACHE_FROM}'" >> $BASH_ENV
 
-                  CACHE_TO="type=registry,mode=<< parameters.cache-mode >>,ref="${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.registry-cache-tag >>"
+                  CACHE_TO="type=registry,mode=<< parameters.cache-mode >>,ref=${DOCKER_REGISTRY}/${DOCKER_USER}/<< parameters.repo >>:<< parameters.registry-cache-tag >>"
                   echo "export DOCKER_BUILDX_CACHE_TO='${CACHE_TO}'" >> $BASH_ENV
       - run:
           name: Build image via Docker Buildx
