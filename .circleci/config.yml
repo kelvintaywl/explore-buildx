@@ -183,7 +183,7 @@ workflows:
       - push:
           name: snyk-node-via-inline-cache
           repo: snyk-node
-          tag: inline-cache-${CIRCLE_SHA1:0:7}
+          tag: inline-cache
           dockerfile: Dockerfile
           build-context: "."
           cache-type: inline
